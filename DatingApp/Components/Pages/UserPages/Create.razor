@@ -1,0 +1,79 @@
+﻿@page "/users/create"
+@inject DatingApp.Data.DatingContext DB
+@using DatingApp.Models
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="User" OnValidSubmit="AddUser" FormName="create" Enhance="true" autocomplete="off">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="firstname" class="form-label">FirstName:</label>
+                <InputText id="firstname" @bind-Value="User.FirstName" class="form-control" />
+                <ValidationMessage For="() => User.FirstName" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="lastname" class="form-label">LastName:</label>
+                <InputText id="lastname" @bind-Value="User.LastName" class="form-control" />
+                <ValidationMessage For="() => User.LastName" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <InputText id="email" @bind-Value="User.Email" class="form-control" />
+                <ValidationMessage For="() => User.Email" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="login" class="form-label">Login:</label>
+                <InputText id="login" @bind-Value="User.Login" class="form-control" />
+                <ValidationMessage For="() => User.Login" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <InputText id="password" @bind-Value="User.Password" class="form-control" />
+                <ValidationMessage For="() => User.Password" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Password2:</label>
+                <InputText id="password2" @bind-Value="User.Password2" class="form-control" />
+                <ValidationMessage For="() => User.Password2" class="text-danger" />
+            </div>
+            @* <div class="mb-3">
+            <label for="createdate" class="form-label">CreateDate:</label>
+            <InputDate id="createdate" @bind-Value="User.CreateDate" class="form-control" />
+            <ValidationMessage For="() => User.CreateDate" class="text-danger" />
+            </div>   *@
+            @* <div class="mb-3">
+            <label for="deletedate" class="form-label">DeleteDate:</label>
+            <InputDate id="deletedate" @bind-Value="User.DeleteDate" class="form-control" />
+            <ValidationMessage For="() => User.DeleteDate" class="text-danger" />
+            </div>   *@
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public User User { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddUser()
+    {
+        DB.Users.Add(User);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}

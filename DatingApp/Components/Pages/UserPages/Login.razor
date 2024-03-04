@@ -1,0 +1,61 @@
+﻿@page "/login"
+@inject NavigationManager NavigationManager
+@inject DatingApp.Data.DatingContext DB
+@inject DatingApp.Services.UserService UserService
+@using DatingApp.Models
+@using System.Linq
+@using Microsoft.EntityFrameworkCore
+
+<h1 class="text-center">Login</h1>
+
+<div class="container w-50">
+    <EditForm Model="user" OnSubmit="LoginPage" FormName="login">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <InputText id="username" @bind-Value="user.Login" class="form-control" />
+            <ValidationMessage For="() => user.Login" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <InputText id="password" type="password" @bind-Value="user.Password" class="form-control" />
+            <ValidationMessage For="() => user.Password" class="text-danger" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </EditForm>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private User user { get; set; } = new();
+
+    private async Task LoginPage()
+    {
+        // Replace this with your actual authentication logic
+        var authenticatedUser = await DB.Users
+            .FirstOrDefaultAsync(u => u.Login == user.Login && u.Password == user.Password);
+
+        if (authenticatedUser != null)
+        {
+            // Successful login, save user details and set IsLoggedIn to true
+            UserService.Id = authenticatedUser.Id;
+            UserService.FirstName = authenticatedUser.FirstName;
+            UserService.LastName = authenticatedUser.LastName;
+            UserService.Email = authenticatedUser.Email;
+            UserService.IsLoggedIn = true;
+
+            // Navigate to the user page
+            NavigationManager.NavigateTo($"/user/{authenticatedUser.Id}");
+            Console.WriteLine($"IsLoggedIn: {UserService.IsLoggedIn}");
+
+
+        }
+        else
+        {
+            // Invalid credentials, show an error message or handle as needed
+            // For simplicity, just navigating back to the login page for now
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+}

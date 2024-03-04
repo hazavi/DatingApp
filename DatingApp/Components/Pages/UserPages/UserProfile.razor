@@ -1,0 +1,57 @@
+﻿@page "/user/{userId:int}"
+@inject NavigationManager NavigationManager
+@inject DatingApp.Data.DatingContext DB
+@inject DatingApp.Services.UserService UserService
+@using DatingApp.Models
+
+<h1 class="text-center">User Profile</h1>
+
+@if (UserService.IsLoggedIn)
+{
+    <div class="container w-50">
+        <dl class="row">
+            <dt class="col-sm-3">User ID:</dt>
+            <dd class="col-sm-9">@UserService.Id</dd>
+
+            <dt class="col-sm-3">First Name:</dt>
+            <dd class="col-sm-9">@UserService.FirstName</dd>
+
+            <dt class="col-sm-3">Last Name:</dt>
+            <dd class="col-sm-9">@UserService.LastName</dd>
+
+            <dt class="col-sm-3">Email:</dt>
+            <dd class="col-sm-9">@UserService.Email</dd>
+        </dl>
+    </div>
+}
+else
+{
+    <p class="text-danger">You are not logged in. Please log in to access this page.</p>
+    <p><a href="/login">Go to Login Page</a></p>
+}
+
+<button class="btn btn-primary" @onclick="Logout">Logout</button>
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    private User user;
+
+    protected override void OnInitialized()
+    {
+        // Fetch user details based on userId
+        user = DB.Users.FirstOrDefault(u => u.Id == userId);
+    }
+    private void Logout()
+    {
+        // Clear user details and navigate back to the login page
+        UserService.Id = 0;
+        UserService.FirstName = string.Empty;
+        UserService.LastName = string.Empty;
+        UserService.Email = string.Empty;
+        UserService.IsLoggedIn = false;
+
+        NavigationManager.NavigateTo("/login");
+    }
+}
