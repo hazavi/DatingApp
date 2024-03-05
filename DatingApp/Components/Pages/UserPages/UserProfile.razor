@@ -3,11 +3,18 @@
 @inject DatingApp.Data.DatingContext DB
 @inject DatingApp.Services.UserService UserService
 @using DatingApp.Models
+@rendermode InteractiveServer
 
 <h1 class="text-center">User Profile</h1>
 
+
+
 @if (UserService.IsLoggedIn)
 {
+    var userProfile = DB.UserProfiles.FirstOrDefault(u => u.UserId == UserService.Id);
+
+    <h3>Logged In... Hello @UserService.FirstName.ToUpper()!</h3>
+
     <div class="container w-50">
         <dl class="row">
             <dt class="col-sm-3">User ID:</dt>
@@ -50,6 +57,7 @@ else
         UserService.FirstName = string.Empty;
         UserService.LastName = string.Empty;
         UserService.Email = string.Empty;
+        UserService.Login = string.Empty;
         UserService.IsLoggedIn = false;
 
         NavigationManager.NavigateTo("/login");

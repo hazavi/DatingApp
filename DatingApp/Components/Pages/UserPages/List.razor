@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+@inject DatingApp.Data.DatingContext DB
+@using DatingApp.Models
+@inject NavigationManager Nav
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Admin</PageTitle>
+
+<h1>Admin Page</h1>
+
+<p>
+    <button class="btn btn-primary" @onclick="Create">
+        <Icon Name="IconName.PlusLg" Size="IconSize.x6" />
+        Create
+    </button>
+
+
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Login</th>
+            <th>Password</th>
+            <th>Password2</th>
+            <th>Create Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in DB.Users)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Login</td>
+                <td>@user.Password</td>
+                <td>@user.Password2</td>
+                <td>@user.CreateDate</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="@(() => NavigateToEdit(user.Id))"><Icon Name="IconName.PencilSquare" /></button>
+                    <button class="btn btn-warning" @onclick="@(() => NavigateToDetails(user.Id))"><Icon Name="IconName.CardText" /></button>
+                    <button class="btn btn-danger" @onclick="@(() => NavigateToDelete(user.Id))"><Icon Name="IconName.Trash3Fill" /></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    private void NavigateToEdit(int userId)
+    {
+        Nav.NavigateTo($"/users/edit?id={userId}");
+    }
+
+    private void NavigateToDetails(int userId)
+    {
+        Nav.NavigateTo($"/users/details?id={userId}");
+    }
+
+    private void NavigateToDelete(int userId)
+    {
+        Nav.NavigateTo($"/users/delete?id={userId}");
+    }
+    private void Create()
+    {
+        Nav.NavigateTo($"/users/create");
+    }
+
+}

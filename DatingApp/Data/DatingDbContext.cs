@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DatingApp.Models;
-using DatingApp.Models;
+using DatingApp.Model.Enums;
 
 namespace DatingApp.Data
 {
@@ -16,8 +16,6 @@ namespace DatingApp.Data
         {
 
         }
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Gender> Genders { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Like> Likes { get; set; }
@@ -42,14 +40,20 @@ namespace DatingApp.Data
                .Property(e => e.Status)
                .HasDefaultValueSql("0");
 
-            modelBuilder.Entity<City>()
+            modelBuilder.Entity<UserProfile>()
                 .HasIndex(b => b.CityName)
                 .IsUnique()
                 .HasFilter(null);
 
-            modelBuilder.Entity<City>()
-            .Property(et => et.Id)
-            .ValueGeneratedNever();
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.UserProfile)                     // User has one UserProfile
+                .WithOne(p => p.User)                           // UserProfile is associated with one User
+                .HasForeignKey<UserProfile>(p => p.UserId)      // ForeignKey in UserProfile referencing UserId in User
+                .IsRequired(false);                             // User may not have a UserProfile, so it's not required
+
+            //modelBuilder.Entity<City>()
+            //.Property(et => et.Id)
+            //.ValueGeneratedNever();
 
             // Configure the many-to-many relationship between UserProfile and Like
             modelBuilder.Entity<Like>()

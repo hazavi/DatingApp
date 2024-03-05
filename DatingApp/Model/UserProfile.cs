@@ -1,11 +1,16 @@
-﻿using DatingApp.Models;
+﻿using DatingApp.Model.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DatingApp.Models
 {
     public class UserProfile
     {
+        [Key]
         public int Id { get; set; }
+        public int UserId { get; set; }
+
         [Required(ErrorMessage = "Please provide a User Name")]
         [StringLength(100)]
         public string UserName { get; set; } = null!;
@@ -18,11 +23,12 @@ namespace DatingApp.Models
 
         public string? AboutMe { get; set; }
 
-        [Required(ErrorMessage = "Please provide a Valid City Id")]
+        [EnumDataType(typeof(Gender), ErrorMessage = "Please Select a Gender")]
+        public Gender Gender { get; set; }
 
-        public int CityId { get; set; }
-        [Required(ErrorMessage = "Please provide a Valid User Id")]
-        public int UserId { get; set; }
+        public string CityName { get; set; }
+
+        public string Hobbies { get; set; }
 
         // Navigation property for self-referencing many-to-many relationship
         public virtual ICollection<Like> LikedByUsers { get; set; } = new List<Like>();
@@ -32,5 +38,6 @@ namespace DatingApp.Models
         public virtual ICollection<Message> SentByUsers { get; set; } = new List<Message>();
         public virtual ICollection<Message> ReceivedByUsers { get; set; } = new List<Message>();
 
+        public User User { get; set; }
     }
 }

@@ -57,11 +57,7 @@ else
                     <InputDate id="createdate" @bind-Value="User.CreateDate" class="form-control" />
                     <ValidationMessage For="() => User.CreateDate" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="deletedate" class="form-label">DeleteDate:</label>
-                    <InputDate id="deletedate" @bind-Value="User.DeleteDate" class="form-control" />
-                    <ValidationMessage For="() => User.DeleteDate" class="text-danger" />
-                </div>
+
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
@@ -69,7 +65,7 @@ else
 }
 
 <div>
-    <a href="/">
+    <a href="/admin">
         <Icon Name="IconName.ArrowLeft"/>
         Back to List</a></div>
 
@@ -112,7 +108,7 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/users");
+        NavigationManager.NavigateTo("/admin");
     }
 
     bool UserExists(int id)

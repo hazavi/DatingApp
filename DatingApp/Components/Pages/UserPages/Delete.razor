@@ -52,7 +52,7 @@
         </dl>
         <EditForm method="post" Model="user" OnValidSubmit="DeleteUser" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(user is null)">Delete</button> |
-            <a href="/">
+            <a href="/admin">
                 <Icon Name="IconName.ArrowLeft" />
                 Back to List
             </a>

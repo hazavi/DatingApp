@@ -1,6 +1,4 @@
-﻿@using BlazorBootstrap;
-
-<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">DatingApp</a>
     </div>
@@ -15,7 +13,14 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
+                <Icon Name="IconName.Person" Size="IconSize.x2" />
+                <span aria-hidden="true"></span> Admin
+            </NavLink>
+        </div>
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
                 <Icon Name="IconName.ArrowBarRight" Size="IconSize.x2" />
@@ -24,12 +29,46 @@
         </div>        
         
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="logout" Match="NavLinkMatch.All">
+            <button class="nav-link btn btn-link" @onclick="Logout">
                 <Icon Name="IconName.ArrowBarLeft" Size="IconSize.x2" />
                 <span aria-hidden="true"></span> Logout
-            </NavLink>
+            </button>
         </div>
+        
+
 
     </nav>
 </div>
 
+@code {
+    @inject NavigationManager NavigationManager
+    @inject DatingApp.Services.UserService UserService
+    @inject IJSRuntime JSRuntime
+    @using Microsoft.JSInterop
+    @rendermode InteractiveServer
+
+    private void Logout()
+    {
+        if (!UserService.IsLoggedIn)
+        {
+            JSRuntime.InvokeVoidAsync("alert", "You are already logged out.");
+
+        }
+        else
+        {
+            UserService.Id = 0;
+            UserService.FirstName = string.Empty;
+            UserService.LastName = string.Empty;
+            UserService.Email = string.Empty;
+            UserService.Login = string.Empty;
+            UserService.IsLoggedIn = false;
+
+            // Show a success alert using JavaScript
+            JSRuntime.InvokeVoidAsync("alert", "You have been successfully logged out.");
+
+            // Redirect to the login page or any other desired location
+            NavigationManager.NavigateTo("/login");
+        }
+        
+    }
+}

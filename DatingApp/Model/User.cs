@@ -4,6 +4,7 @@ namespace DatingApp.Models
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please provide a First Name")]
