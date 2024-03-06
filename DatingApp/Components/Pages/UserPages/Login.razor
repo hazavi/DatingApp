@@ -34,13 +34,19 @@ else
                 <ValidationMessage For="() => user.Password" class="text-danger" />
             </div>
 
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">@errorMessage</div>
+            }
+
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </EditForm>
     </div>
 
-    @code {
+@code {
     [SupplyParameterFromForm]
     private User user { get; set; } = new();
+    private string errorMessage;
 
     protected override void OnInitialized()
     {
@@ -67,12 +73,11 @@ else
             UserService.Login = authenticatedUser.Login;
             UserService.IsLoggedIn = true;
 
-            // Navigate to the user profile page
             NavigationManager.NavigateTo($"/user/{authenticatedUser.Id}");
         }
         else
         {
-            NavigationManager.NavigateTo("/login");
+            errorMessage = "Invalid username or password. Please try again.";
         }
     }
     }

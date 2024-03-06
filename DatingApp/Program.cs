@@ -11,7 +11,7 @@ builder.Services.AddRazorComponents()
 
 
 builder.Services.AddDbContext<DatingContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DatingConnection") ?? throw new InvalidOperationException("Connection string 'NiceDatingContext' not found.")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DatingConnection") ?? throw new InvalidOperationException("Connection string 'DatingConnection' not found.")));
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 

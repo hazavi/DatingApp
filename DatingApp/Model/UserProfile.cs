@@ -16,7 +16,7 @@ namespace DatingApp.Models
         public string UserName { get; set; } = null!;
 
         [Required(ErrorMessage = "Please provide a Birth Date")]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; } = null;
 
         [Range(50, 300)]
         public int Height { get; set; }

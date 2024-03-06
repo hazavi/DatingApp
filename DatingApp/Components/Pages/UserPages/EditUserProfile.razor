@@ -1,0 +1,121 @@
+﻿@page "/edit-userprofile/{userId:int}"
+@inject NavigationManager NavigationManager
+@inject DatingApp.Data.DatingContext DB
+@inject DatingApp.Services.UserService UserService
+@using DatingApp.Models
+@using DatingApp.Model.Enums
+@using System.Linq
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+
+<h1>Editing</h1>
+@if (userProfile != null)
+{
+    <EditForm Model="userProfile" OnValidSubmit="HandleValidSubmit" FormName="createOrEdit" Enhance="true" autocomplete="off">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="UserName">User Name:</label>
+            <InputText id="UserName" class="form-control" @bind-Value="userProfile.UserName" />
+            <ValidationMessage For="@(() => userProfile.UserName)" />
+        </div>
+
+        <div class="form-group">
+            <label for="BirthDate">Birth Date:</label>
+            <InputDate id="BirthDate" class="form-control" @bind-Value="userProfile.BirthDate" />
+            <ValidationMessage For="@(() => userProfile.BirthDate)" />
+        </div>
+
+        <div class="form-group">
+            <label for="Height">Height (cm):</label>
+            <InputNumber id="Height" class="form-control" @bind-Value="userProfile.Height" />
+            <ValidationMessage For="@(() => userProfile.Height)" />
+        </div>
+
+        <div class="form-group">
+            <label for="AboutMe">About Me:</label>
+            <InputTextArea id="AboutMe" class="form-control" @bind-Value="userProfile.AboutMe" />
+        </div>
+
+        <div class="form-group">
+            <label for="Gender">Gender:</label>
+            <InputSelect id="Gender" class="form-control" @bind-Value="userProfile.Gender">
+                <option value="">Select a Gender</option>
+                @foreach (var gender in Enum.GetValues<Gender>())
+                {
+                    <option value="@gender">@gender</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => userProfile.Gender)" />
+        </div>
+
+        <div class="form-group">
+            <label for="CityName">City Name:</label>
+            <InputText id="CityName" class="form-control" @bind-Value="userProfile.CityName" />
+        </div>
+
+        <div class="form-group">
+            <label for="Hobbies">Hobbies:</label>
+            <InputText id="Hobbies" class="form-control" @bind-Value="userProfile.Hobbies" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Profile</button>
+    </EditForm>
+    <div>
+        <a href="/user/@userProfile.UserId">
+            <Icon Name="IconName.ArrowLeft" />
+            Back to List
+        </a>
+    </div>
+
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    User user;
+
+    private DatingApp.Models.UserProfile? userProfile;
+
+    private bool editMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserService.IsLoggedIn)
+        {
+            userProfile = await DB.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (userProfile == null)
+            {
+                userProfile = new DatingApp.Models.UserProfile
+                    {
+                        UserId = userId
+                    };
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (userProfile != null)
+        {
+            if (userProfile.Id == 0) // New profile, since Id is not set
+            {
+                DB.UserProfiles.Add(userProfile);
+            }
+            else // Existing profile
+            {
+                DB.UserProfiles.Update(userProfile);
+            }
+            await DB.SaveChangesAsync();
+            NavigationManager.NavigateTo($"/user/{userProfile.UserId}");
+        }
+    }
+}

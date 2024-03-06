@@ -9,7 +9,14 @@
 
 <h1>Welcome to Dating App</h1>
 
+<button class="btn btn-primary" @onclick="Create">
+    <Icon Name="IconName.PlusLg" Size="IconSize.x6" />
+    Create
+</button>
 
 @code{
 
+    private void Create(){
+        Nav.NavigateTo("/users/create");
+    }
 }

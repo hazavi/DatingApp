@@ -47,7 +47,7 @@ namespace DatingApp.Migrations
 
                     b.HasIndex("LikerId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("DatingApp.Models.Message", b =>
@@ -79,7 +79,7 @@ namespace DatingApp.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("DatingApp.Models.User", b =>
@@ -130,7 +130,7 @@ namespace DatingApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DatingApp.Models.UserProfile", b =>
@@ -177,7 +177,7 @@ namespace DatingApp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("DatingApp.Models.Like", b =>

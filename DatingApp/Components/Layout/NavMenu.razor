@@ -15,8 +15,22 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="connect" Match="NavLinkMatch.All">
+                <Icon Name="IconName.PersonHeart" Size="IconSize.x2" />
+                <span aria-hidden="true"></span> Connect
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <button class="nav-link btn btn-link" @onclick="UserProfile">
                 <Icon Name="IconName.Person" Size="IconSize.x2" />
+                <span aria-hidden="true"></span> Profile
+            </button>
+        </div>
+        
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
+                <Icon Name="IconName.PersonFillGear" Size="IconSize.x2" />
                 <span aria-hidden="true"></span> Admin
             </NavLink>
         </div>
@@ -47,6 +61,10 @@
     @using Microsoft.JSInterop
     @rendermode InteractiveServer
 
+    private void UserProfile()
+    {
+        NavigationManager.NavigateTo($"/user/{UserService.Id}");
+    }
     private void Logout()
     {
         if (!UserService.IsLoggedIn)

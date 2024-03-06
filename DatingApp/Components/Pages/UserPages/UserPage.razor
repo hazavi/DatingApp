@@ -1,0 +1,143 @@
+﻿@page "/user/{userId:int}"
+@inject NavigationManager NavigationManager
+@inject DatingApp.Data.DatingContext DB
+@inject DatingApp.Services.UserService UserService
+@using DatingApp.Models
+@using DatingApp.Model.Enums
+@using System.Linq
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+
+@if (!UserService.IsLoggedIn)
+{
+    <div>Please <a href="/login">login</a> to access your profile.</div>
+}
+else if (userProfile != null)
+{
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <Icon Name="IconName.Person" Size="IconSize.x2" />
+            <h2 class="card-title mb-0 ml-2">Your Profile</h2>
+        </div>
+
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">User Name</dt>
+                <dd class="col-sm-9">@userProfile.UserName</dd>
+
+                <dt class="col-sm-3">Birth Date</dt>
+                <dd class="col-sm-9">@FormatBirthDate(userProfile.BirthDate)</dd>
+
+                <dt class="col-sm-3">Age</dt>
+                <dd class="col-sm-9">@Age(userProfile.BirthDate)</dd>
+
+                <dt class="col-sm-3">Height</dt>
+                <dd class="col-sm-9">@userProfile.Height cm</dd>
+
+                <dt class="col-sm-3">About Me</dt>
+                <dd class="col-sm-9">@userProfile.AboutMe</dd>
+
+                <dt class="col-sm-3">Gender</dt>
+                <dd class="col-sm-9">@userProfile.Gender</dd>
+
+                <dt class="col-sm-3">City Name</dt>
+                <dd class="col-sm-9">@userProfile.CityName</dd>
+
+                <dt class="col-sm-3">Hobbies</dt>
+                <dd class="col-sm-9">@userProfile.Hobbies</dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" @onclick="EditProfile">Edit Profile</button>
+        </div>
+    </div>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="EditProfile">Edit Profile</button>
+}
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    private DatingApp.Models.UserProfile? userProfile;
+
+    private bool editMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserService.IsLoggedIn)
+        {
+            userProfile = await DB.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (userProfile == null)
+            {
+                userProfile = new DatingApp.Models.UserProfile
+                    {
+                        UserId = userId
+                    };
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (userProfile != null)
+        {
+            if (userProfile.Id == 0) // New profile, since Id is not set
+            {
+                DB.UserProfiles.Add(userProfile);
+            }
+            else // Existing profile
+            {
+                DB.UserProfiles.Update(userProfile);
+            }
+            await DB.SaveChangesAsync();
+            NavigationManager.NavigateTo($"/user/{userProfile.UserId}");
+        }
+    }
+
+    private void EditProfile()
+    {
+        NavigationManager.NavigateTo($"/edit-userprofile/{userId}");
+    }
+
+    private string FormatBirthDate(DateTime? birthDate)
+    {
+        if (birthDate.HasValue)
+        {
+            // Get the name of the month and the year
+            int day = birthDate.Value.Day;
+            string monthName = birthDate.Value.ToString("MMMM");
+            monthName = char.ToUpper(monthName[0]) + monthName.Substring(1);
+            int year = birthDate.Value.Year;
+
+            return $"{day} {monthName} {year}";
+        }
+        else
+        {
+            return "Unknown";
+        }
+    }
+
+    private int Age(DateTime? birthDate)
+    {
+        if (birthDate.HasValue)
+        {
+            DateTime now = DateTime.Today;
+            int age = now.Year - birthDate.Value.Year;
+
+            if (birthDate.Value.Date > now.AddYears(-age))
+            {
+                age--;
+            }
+
+            return age;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
