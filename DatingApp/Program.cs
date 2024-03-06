@@ -15,7 +15,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DatingConnection
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
-builder.Services.AddScoped<UserService>();
+//builder.Services.AddScoped<UserService>();
+builder.Services.AddSingleton<UserService>();
 
 builder.Services.AddBlazorBootstrap();
 

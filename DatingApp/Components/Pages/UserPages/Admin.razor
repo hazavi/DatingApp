@@ -15,7 +15,7 @@
         <a href="/login">Go to Login</a>
     </div>
 }
-else if (UserService.IsLoggedIn && UserService.Login != "kksadmin")
+else if (UserService.IsLoggedIn && UserService.Login != "admin")
 {
     <div>
         <h1>Not an Admin</h1>
@@ -31,38 +31,4 @@ else
     [SupplyParameterFromForm]
     private User user { get; set; } = new();
 
-    private async Task LoginPage()
-    {
-        // Replace this with your actual authentication logic
-        var authenticatedUser = await DB.Users
-            .FirstOrDefaultAsync(u => u.Login == user.Login && u.Password == user.Password);
-
-        if (authenticatedUser != null)
-        {
-            // Successful login, save user details and set IsLoggedIn to true
-            UserService.Id = authenticatedUser.Id;
-            UserService.FirstName = authenticatedUser.FirstName;
-            UserService.LastName = authenticatedUser.LastName;
-            UserService.Email = authenticatedUser.Email;
-            UserService.IsLoggedIn = true;
-
-            // // Check if the user is an admin
-            // if (authenticatedUser.Login == "kksadmin")
-            // {
-            //     // Navigate to the admin page
-            //     NavigationManager.NavigateTo("/admin");
-            // }
-            // else
-            // {
-            //     // Navigate to the user page
-            //     NavigationManager.NavigateTo($"/users/{authenticatedUser.Id}");
-            // }
-        }
-        else
-        {
-            // Invalid credentials, show an error message or handle as needed
-            // For simplicity, just navigating back to the login page for now
-            NavigationManager.NavigateTo("/login");
-        }
-    }
 }

@@ -6,6 +6,7 @@
 @using DatingApp.Model.Enums
 @using System.Linq
 @using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
 
 @if (!UserService.IsLoggedIn)
 {
@@ -14,7 +15,7 @@
 else
 {
     <div class="container">
-        <h1>Other User Profiles</h1>
+        <h1>User Profiles</h1>
         <div class="row">
             @foreach (var userProfile in UserProfiles)
             {
@@ -40,7 +41,10 @@ else
                             </dl>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary" @onclick="() => LikeUser(userProfile.UserId)">Like</button>
+                            <button class="btn @(LikedStatus.ContainsKey(userProfile.UserId) && LikedStatus[userProfile.UserId] ? "btn-success" : "btn-primary")"
+                                    @onclick="() => LikeUser(userProfile.UserId)">
+                                @(LikedStatus.ContainsKey(userProfile.UserId) && LikedStatus[userProfile.UserId] ? "Liked" : "Like")
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -51,64 +55,52 @@ else
 
 @code {
     private List<DatingApp.Models.UserProfile> UserProfiles { get; set; } = new List<DatingApp.Models.UserProfile>();
+    private Dictionary<int, bool> LikedStatus = new Dictionary<int, bool>();
 
     protected override async Task OnInitializedAsync()
     {
         if (UserService.IsLoggedIn)
         {
             UserProfiles = await DB.UserProfiles.Where(u => u.UserId != UserService.Id).ToListAsync();
+            foreach (var profile in UserProfiles)
+            {
+                var isLiked = await DB.Likes.AnyAsync(l => l.LikerId == UserService.Id && l.LikeeId == profile.UserId && l.Status == 1);
+                LikedStatus[profile.UserId] = isLiked;
+            }
         }
     }
 
     private async Task LikeUser(int likedUserId)
     {
-        if (UserService.IsLoggedIn)
+        if (!UserService.IsLoggedIn) return;
+
+        var existingLike = await DB.Likes.FirstOrDefaultAsync(l => l.LikerId == UserService.Id && l.LikeeId == likedUserId);
+
+        if (existingLike == null)
         {
-            // Check if the user has already liked this user
-            var existingLike = await DB.Likes
-                .FirstOrDefaultAsync(l => l.LikerId == UserService.Id && l.LikeeId == likedUserId);
+            var newLike = new Like
+                {
+                    LikerId = UserService.Id,
+                    LikeeId = likedUserId,
+                    Status = 1 // Liked
+                };
 
-            if (existingLike == null)
-            {
-                // Create a new like
-                var newLike = new Like
-                    {
-                        LikerId = UserService.Id,
-                        LikeeId = likedUserId,
-                        Status = 1 // Liked
-                    };
-
-                DB.Likes.Add(newLike);
-                await DB.SaveChangesAsync();
-                Console.WriteLine($"User with ID {likedUserId} liked by user with ID {UserService.Id}");
-            }
-            else
-            {
-                // Toggle the like status
-                existingLike.Status = existingLike.Status == 0 ? 1 : 0;
-                await DB.SaveChangesAsync();
-                Console.WriteLine($"User with ID {likedUserId} like status toggled by user with ID {UserService.Id}");
-            }
+            DB.Likes.Add(newLike);
+            LikedStatus[likedUserId] = true;
         }
         else
         {
-            // Optionally, display a message indicating that the user needs to be logged in to like other users
-            Console.WriteLine("Please log in to like other users.");
+            // Toggle the like status for simplicity; adjust according to your logic.
+            existingLike.Status = existingLike.Status == 0 ? 1 : 0;
+            LikedStatus[likedUserId] = existingLike.Status == 1;
         }
-    }
 
+        await DB.SaveChangesAsync();
+        StateHasChanged(); // This refreshes the UI with the new like statuses
+    }
 
     private string FormatBirthDate(DateTime? birthDate)
     {
-        // Implement the method to format the birth date as desired
-        // For example:
-        if (birthDate.HasValue)
-        {
-            return birthDate.Value.ToString("MMMM dd, yyyy");
-        }
-        else
-        {
-            return "Unknown";
-        }
+        return birthDate.HasValue ? birthDate.Value.ToString("MMMM dd, yyyy") : "Unknown";
     }
 }

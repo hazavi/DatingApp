@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatingApp.Models
 {
@@ -11,9 +12,13 @@ namespace DatingApp.Models
 
         [Required(ErrorMessage = "Please provide a valid Likee Id")]
         public int LikeeId { get; set; }
+
         public int Status { get; set; } = 0;
 
+        [ForeignKey("LikerId")]
         public virtual UserProfile Liker { get; set; } = null!;
+
+        [ForeignKey("LikeeId")]
         public virtual UserProfile Likee { get; set; } = null!;
 
     }
