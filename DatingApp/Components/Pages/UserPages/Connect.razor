@@ -15,14 +15,21 @@
 else
 {
     <div class="container">
-        <h1>User Profiles</h1>
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center">
+                <h1><strong>Dating Connect</strong></h1>
+                <Icon Name="IconName.Hearts" Size="IconSize.x1" />
+            </div>
+        </div>
+
         <div class="row">
             @foreach (var userProfile in UserProfiles)
             {
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">@userProfile.UserName</h5>
+                        <div class="card-header d-flex align-items-center ">
+                            <Icon Name="IconName.PersonFill" Size="IconSize.x3" />
+                            <h5 class="card-title"><strong>@userProfile.UserName</strong></h5>
                         </div>
                         <div class="card-body">
                             <dl>
@@ -34,7 +41,7 @@ else
                                 <dd>@userProfile.AboutMe</dd>
                                 <dt>Gender:</dt>
                                 <dd>@userProfile.Gender</dd>
-                                <dt>City Name:</dt>
+                                <dt>City:</dt>
                                 <dd>@userProfile.CityName</dd>
                                 <dt>Hobbies:</dt>
                                 <dd>@userProfile.Hobbies</dd>
@@ -43,7 +50,7 @@ else
                         <div class="card-footer">
                             <button class="btn @(LikedStatus.ContainsKey(userProfile.UserId) && LikedStatus[userProfile.UserId] ? "btn-success" : "btn-primary")"
                                     @onclick="() => LikeUser(userProfile.UserId)">
-                                @(LikedStatus.ContainsKey(userProfile.UserId) && LikedStatus[userProfile.UserId] ? "Liked" : "Like")
+                                <Icon Name="IconName.HandThumbsUpFill" Size="IconSize.x6" />
                             </button>
                         </div>
                     </div>

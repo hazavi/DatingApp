@@ -15,9 +15,23 @@
 else if (userProfile != null)
 {
     <div class="card">
-        <div class="card-header d-flex align-items-center">
-            <Icon Name="IconName.Person" Size="IconSize.x2" />
-            <h2 class="card-title mb-0 ml-2">Your Profile</h2>
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <Icon Name="IconName.PersonFill" Size="IconSize.x1" />
+                <h2 class="card-title mb-0 ml-2"><strong>@UserService.FirstName @UserService.LastName</strong></h2>
+            </div>
+
+            <div>
+                <button class="btn btn-warning" @onclick="LoginSetting">
+                    <Icon Name="IconName.EyeFill" Size="IconSize.x6" />
+                    Login Settings
+                </button>
+                <button class="btn btn-warning" @onclick="EditProfile">
+                    <Icon Name="IconName.PencilFill" Size="IconSize.x6" />
+                      Edit
+                </button>
+
+            </div>
         </div>
 
         <div class="card-body">
@@ -46,9 +60,6 @@ else if (userProfile != null)
                 <dt class="col-sm-3">Hobbies</dt>
                 <dd class="col-sm-9">@userProfile.Hobbies</dd>
             </dl>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-primary" @onclick="EditProfile">Edit Profile</button>
         </div>
     </div>
 }
@@ -101,6 +112,10 @@ else
     private void EditProfile()
     {
         NavigationManager.NavigateTo($"/edit-userprofile/{userId}");
+    }
+    private void LoginSetting()
+    {
+        NavigationManager.NavigateTo($"/login/{userId}");
     }
 
     private string FormatBirthDate(DateTime? birthDate)

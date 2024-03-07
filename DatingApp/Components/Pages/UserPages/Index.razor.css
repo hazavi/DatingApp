@@ -1,0 +1,14 @@
+﻿.container-title {
+    background-image: url('/wwwroot/imgs/pal2.jpg'); /* Replace 'your-image-path.jpg' with the path to your image */
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Adjust the height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Set text color to contrast with background */
+}
+
+    .container-title h1 {
+        font-size: 3rem; /* Adjust font size as needed */
+    }

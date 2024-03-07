@@ -6,10 +6,6 @@ namespace DatingApp.Data
 {
     public class DatingContext : DbContext
     {
-        //public DbSet<Customer> Customers { get; set; } = null!;
-        //public DbSet<Order> Orders { get; set; } = null!;
-        //public DbSet<Product> Products { get; set; } = null!;
-        //public DbSet<OrderDetail> OrderDetails { get; set; } = null!;
 
         public DatingContext(DbContextOptions<DatingContext> options)
             : base(options)
@@ -20,11 +16,6 @@ namespace DatingApp.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NiceDating;Integrated Security=True;");
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

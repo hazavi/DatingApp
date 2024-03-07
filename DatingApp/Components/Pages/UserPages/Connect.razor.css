@@ -1,0 +1,14 @@
+﻿
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Customize the shadow as needed */
+    transition: box-shadow 0.3s ease; /* Add transition for smoother effect */
+}
+    .card:hover {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    }
+.card-header{
+    background-color:lightblue;
+}
+.card-footer {
+    background-color: white;
+}

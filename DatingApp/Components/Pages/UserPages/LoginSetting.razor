@@ -1,15 +1,10 @@
-﻿@page "/users/details"
+﻿@page "/login/{Id:int}"
 @inject DatingApp.Data.DatingContext DB
 @using DatingApp.Models
 @using DatingApp.Services
+@inject DatingApp.Services.UserService UserService
 @inject NavigationManager NavigationManager
 @using Microsoft.EntityFrameworkCore
-
-@inject UserService UserService
-
-<PageTitle>Details</PageTitle>
-
-<h1>UserDetails</h1>
 
 
 <div>
@@ -39,19 +34,20 @@
             <dd class="col-sm-10">@user.DeleteDate</dd>
         </dl>
         <div>
-            <a href="@($"/users/edit?id={user.Id}")">Edit</a> |
-            <a href="/admin">
+            <a href="@($"/edit-login/{user.Id}")">Edit</a> |
+            <a href="/user/@Id">
                 <Icon Name="IconName.ArrowLeft" />
-                Back to List
+                Back
             </a>
         </div>
     }
 </div>
 
+
 @code {
     User? user;
 
-    [SupplyParameterFromQuery]
+    [Parameter]
     public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
