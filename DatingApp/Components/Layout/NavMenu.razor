@@ -1,7 +1,8 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-content-center justify-content-center" href="">
+        <a class="navbar-brand d-flex align-content-center" href="">
             <Icon Name="IconName.HeartFill" Size="IconSize.x3" />
+            <span style="margin-left: 8px; margin-top: 4px"><strong>Dating App</strong></span>
         </a>
 
     </div>
@@ -12,43 +13,44 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            <NavLink class="nav-link btn btn-link" href="" Match="NavLinkMatch.All">
+                <Icon Name="IconName.HouseHeartFill" Size="IconSize.x2" />
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Home
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="connect" Match="NavLinkMatch.All">
+            <NavLink class="nav-link btn btn-link" href="connect" Match="NavLinkMatch.All">
                 <Icon Name="IconName.PersonHeart" Size="IconSize.x2" />
-                <span aria-hidden="true"></span> Connect
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Connect
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
             <button class="nav-link btn btn-link" @onclick="UserProfile">
-                <Icon Name="IconName.Person" Size="IconSize.x2" />
-                <span aria-hidden="true"></span> Profile
+                <Icon Name="IconName.PersonFill" Size="IconSize.x2" />
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Profile
             </button>
         </div>
         
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
+            <NavLink class="nav-link btn btn-link" href="admin" Match="NavLinkMatch.All">
                 <Icon Name="IconName.PersonFillGear" Size="IconSize.x2" />
-                <span aria-hidden="true"></span> Admin
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Admin
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
+            <NavLink class="nav-link btn btn-link" href="login" Match="NavLinkMatch.All">
                 <Icon Name="IconName.ArrowBarRight" Size="IconSize.x2" />
-                <span aria-hidden="true"></span> Login
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Login
             </NavLink>
         </div>        
         
         <div class="nav-item px-3">
             <button class="nav-link btn btn-link" @onclick="Logout">
                 <Icon Name="IconName.ArrowBarLeft" Size="IconSize.x2" />
-                <span aria-hidden="true"></span> Logout
+                <span aria-hidden="true" style="margin-left: 8px;"></span> Logout
             </button>
         </div>
         

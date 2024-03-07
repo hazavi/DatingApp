@@ -5,6 +5,7 @@
 @inject DatingApp.Services.UserService UserService
 @inject NavigationManager NavigationManager
 @using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
 
 
 <div>
@@ -15,6 +16,7 @@
     }
     else
     {
+
         <dl class="row">
             <dt class="col-sm-2">FirstName</dt>
             <dd class="col-sm-10">@user.FirstName</dd>
@@ -29,17 +31,20 @@
             <dt class="col-sm-2">Password2</dt>
             <dd class="col-sm-10">@user.Password2</dd>
             <dt class="col-sm-2">CreateDate</dt>
-            <dd class="col-sm-10">@user.CreateDate</dd>
-            <dt class="col-sm-2">DeleteDate</dt>
-            <dd class="col-sm-10">@user.DeleteDate</dd>
+            <dd class="col-sm-10">@user.CreateDate.ToShortDateString()</dd>
         </dl>
         <div>
-            <a href="@($"/edit-login/{user.Id}")">Edit</a> |
-            <a href="/user/@Id">
-                <Icon Name="IconName.ArrowLeft" />
-                Back
-            </a>
+            <button class="btn btn-primary" @onclick="Edit" style="margin-bottom: 10px;">
+                <Icon Name="IconName.PencilFill" Size="IconSize.x6" />
+                Edit
+            </button>
+
         </div>
+        <a href="/user/@Id" style="margin-right: 8px;">
+            <Icon Name="IconName.ArrowLeft" />
+            Back
+        </a>
+
     }
 </div>
 
@@ -59,5 +64,10 @@
             NavigationManager.NavigateTo("notfound");
         }
 
+    }
+
+    private void Edit()
+    {
+        NavigationManager.NavigateTo($"/edit-login/{user.Id}");
     }
 }
